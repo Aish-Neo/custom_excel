@@ -1,0 +1,27 @@
+
+<!--<input type="file" (change)="excelService.onFileChange($event)" multiple="false" />-->
+<button (click)="excelService.exportAsExcelFile(data, 'capgeminiTest')">
+    Export
+</button>
+<div class="tabbable tabs-bottom">
+    <div class="tab-content">
+        <div class="tab-pane active" id="home">
+            <div class="jumbotron" *ngIf="data?.data?.length > 0">
+                <ng-container *ngFor="let sheetName of data?.sheetName;let i = index">
+                    <hot-table [data]="data?.data[i]"
+                               [rowHeaders]="true"
+                               [colHeaders]="true"
+                               (afterChange) = "afterChangeData($event)"
+                               *ngIf="sIndex === i"
+                    ></hot-table>
+                </ng-container>
+            </div>
+        </div>
+    </div>
+    <!-- tab content -->
+    <ul class="nav nav-tabs">
+        <li [class.active]="sIndex === i" *ngFor="let sheetName of data?.sheetName;let i = index"
+            (click)="setIndex(i)"><a data-toggle="tab">{{sheetName}}</a></li>
+    </ul>
+
+</div>
