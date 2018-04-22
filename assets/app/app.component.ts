@@ -14,7 +14,7 @@ export class AppComponent {
     private colHeaders: string[];
     private columns: any[];
     private options: any;
-    apiRoot: string = "http://localhost:3000";
+    apiRoot: string = "http://localhost:8080";
     sIndex: number = 0;
     constructor(public excelService: ExcelService, private http: HttpClient){
         this.getDataFromExcelSheet();
