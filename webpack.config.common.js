@@ -26,6 +26,8 @@ module.exports = {
     target: "webworker", // or 'node' or 'node-webkit'
     externals:{
         fs:    "commonjs fs",
-        path:  "commonjs path"
+        path:  "commonjs path",
+        './cptable': 'var cptable',
+        '../xlsx.js': 'var _XLSX'
     }
 };
