@@ -16,6 +16,7 @@ export class AppComponent {
     private options: any;
     apiRoot: string = "http://localhost:8080";
     sIndex: number = 0;
+    sheetNum : number = 0;
     constructor(public excelService: ExcelService, private http: HttpClient){
         this.getDataFromExcelSheet();
         this.colHeaders = ['Country', 'Level', 'Units', 'As Of', '1Y Chg', '5Y Ago', '10Y Ago', '25Y Ago'];
@@ -54,5 +55,10 @@ export class AppComponent {
     }
     setIndex(index: number) {
         this.sIndex = index;
+    }
+    addNewSheet() {
+        this.data.data.push(Handsontable.helper.createEmptySpreadsheetData(10, 10));
+        this.sheetNum += 1;
+        this.data.sheetName.push('Sheet' + this.sheetNum);
     }
 }

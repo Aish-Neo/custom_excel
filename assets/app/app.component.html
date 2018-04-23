@@ -3,6 +3,7 @@
 <button (click)="excelService.exportAsExcelFile(data, 'capgeminiTest')">
     Export
 </button>
+
 <div class="tabbable tabs-bottom">
     <div class="tab-content">
         <div class="tab-pane active" id="home">
@@ -13,6 +14,9 @@
                                [colHeaders]="true"
                                (afterChange) = "afterChangeData($event)"
                                *ngIf="sIndex === i"
+                               [mergeCells] = "true"
+                               [columnSorting] = "true"
+                               [contextMenu] = "true"
                     ></hot-table>
                 </ng-container>
             </div>
@@ -20,8 +24,14 @@
     </div>
     <!-- tab content -->
     <ul class="nav nav-tabs">
-        <li [class.active]="sIndex === i" *ngFor="let sheetName of data?.sheetName;let i = index"
-            (click)="setIndex(i)"><a data-toggle="tab">{{sheetName}}</a></li>
+        <li [class.active]="sIndex === i"
+            *ngFor="let sheetName of data?.sheetName;let i = index"
+            (click)="setIndex(i)">
+            <a data-toggle="tab">{{sheetName}}</a>
+        </li>
+        <li (click)="addNewSheet()">
+            <a class="glyphicon glyphicon-plus"></a>
+        </li>
     </ul>
 
 </div>
