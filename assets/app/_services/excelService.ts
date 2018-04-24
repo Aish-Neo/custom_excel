@@ -2,14 +2,15 @@ import { Injectable } from '@angular/core';
 import * as FileSaver from 'file-saver';
 import * as XLSX from 'xlsx';
 import * as XLSXStyle from 'xlsx-style';
+import {HttpClient} from "@angular/common/http";
 
 const EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
 const EXCEL_EXTENSION = '.xlsx';
 
 @Injectable()
 export class ExcelService {
-
-    constructor() { }
+    apiRoot: string = "http://localhost:8080";
+    constructor(private http: HttpClient) { }
     // public exportAsExcelFile(json: any[], excelFileName: string): void {
     //     // const dataSet = {};
     //     // console.log(json.sheetName);
@@ -42,7 +43,7 @@ export class ExcelService {
         const workbook: XLSX.WorkBook = { Sheets: ary[0], SheetNames: json.sheetName };
         // Use XLSXStyle instead of XLSX write function which property writes cell styles.
         const excelBuffer: any = XLSXStyle.write(workbook, { bookType: 'xlsx', type: 'buffer' });
-        this.saveAsExcelFile(excelBuffer, excelFileName);
+        this.saveAsExcelFile(excelBuffer, excelFileName, workbook);
 
     }
 
@@ -55,10 +56,14 @@ export class ExcelService {
         cell.s = style;
     }
 
-    private saveAsExcelFile(buffer: any, fileName: string): void {
+    private saveAsExcelFile(buffer: any, fileName: string, workbook): void {
         const data: Blob = new Blob([buffer], {
             type: EXCEL_TYPE
         });
+        // var blob = new Blob(["Hello, world!"], {type: "text/plain;charset=utf-8"});
+        // FileSaver.saveAs(blob, "/public/hello world.txt");
+        this.saveRecords(workbook);
+       // XLSX.writeFile(workbook, 'Master.xlsx');
         FileSaver.saveAs(data, fileName + '_export_' + new Date().getTime() + EXCEL_EXTENSION);
     }
     onFileChange(evt: any) {
@@ -97,5 +102,15 @@ export class ExcelService {
         //     console.log((XLSX.utils.sheet_to_json(ws, {header: 1})));
         //     return (XLSX.utils.sheet_to_json(ws, {header: 1}));
         // };
+    }
+    saveRecords(blob) {
+        let url = `${this.apiRoot}/api/upload`;
+        var update = {'blob': blob};
+        // const data = new FormData();
+        // data.append('blob', blob);
+        // console.log(update);
+        this.http.post(url, update).subscribe((res: any) => {
+            console.log(res);
+        });
     }
 }

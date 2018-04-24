@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, ViewChild} from '@angular/core';
 import * as Handsontable from 'handsontable';
 import { getAdvancedData } from './data/data';
 import {ExcelService} from "./_services/excelService";
@@ -10,6 +10,7 @@ import {HttpClient} from "@angular/common/http";
     styleUrls: ['./app.component.css']
 })
 export class AppComponent {
+    @ViewChild("hot") hot;
     private data: any;
     private colHeaders: string[];
     private columns: any[];
@@ -17,39 +18,46 @@ export class AppComponent {
     apiRoot: string = "http://localhost:8080";
     sIndex: number = 0;
     sheetNum : number = 0;
+    columns: any[] = [
+        {
+            data: 'Application',
+            readOnly: true
+        },
+        {
+            data: 'Status',
+            renderer: 'text',
+            readOnly: true
+        },
+        {
+            data: 'isActive',
+            type: 'checkbox',
+            checkedTemplate: 'y',
+            uncheckedTemplate: 'n'
+        }
+    ];
     constructor(public excelService: ExcelService, private http: HttpClient){
         this.getDataFromExcelSheet();
-        this.colHeaders = ['Country', 'Level', 'Units', 'As Of', '1Y Chg', '5Y Ago', '10Y Ago', '25Y Ago'];
-        this.columns = [
-            {data: 0, type: 'text'},
-            {data: 1, type: 'numeric', numericFormat: { pattern: '0,0.00[0000]' }},
-            {data: 2, type: 'text'},
-            {data: 3, type: 'numeric', numericFormat: { pattern: '0' }},
-            {data: 4, type: 'numeric', numericFormat: { pattern: '0.00%' }, renderer:
-                function percentRenderer(instance, td, row, col, prop, value, cellProperties) {
-                    Handsontable.renderers.NumericRenderer.apply(this, arguments);
-                    td.style.color = (value < 0) ? 'red' : 'green';
-                }
-            },
-            {data: 5, type: 'numeric', numericFormat: { pattern: '0,0.00[0000]' }},
-            {data: 6, type: 'numeric', numericFormat: { pattern: '0,0.00[0000]' }}
-        ];
-        this.options = {
-            height: 396,
-            rowHeaders: true,
-            stretchH: 'all',
-            columnSorting: true,
-            contextMenu: true,
-            className: 'htCenter htMiddle',
-            readOnly: true
-        };
     }
-    afterChangeData(e) {
-        //console.log(e);
+    afterChangeData(e, hot) {
+        if (e.params[0] !== null) {
+            // 0 - ID, 1 - Field, 2 - Old value, 3 - New Value
+            this.data.data[this.sIndex][e.params[0][0][0]].Status = e.params[0][0][3];
+            // console.log(e.params[0]);
+            // console.log(e.params[0][0][3]);
+            // console.log(this.data.data[this.sIndex][e.params[0][0][0]]);
+            // console.log(hot);
+            hot.hotInstance.render();
+        }
     }
     getDataFromExcelSheet() {
         let url = `${this.apiRoot}/api/upload`;
         this.http.get(url).subscribe((res: any) => {
+            for(var i = 0; i < res.data.length; i++){
+                for(var j = 0; j < res.data[i].length; j++){
+                    res.data[i][j].isActive = res.data[i][j].Status === 'y' ? 'y' : 'n';
+                }
+            }
+            // console.log(res);
             this.data = res;
         });
     }
@@ -61,4 +69,5 @@ export class AppComponent {
         this.sheetNum += 1;
         this.data.sheetName.push('Sheet' + this.sheetNum);
     }
+
 }

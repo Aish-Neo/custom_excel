@@ -19,11 +19,12 @@ router.get("/", function(req, res) {
     var sheet_name_list = workbook.SheetNames;
     var combineSheets = [];
     for(var i = 0; i < sheet_name_list.length;i++){
+        console.log(XLSX.utils.sheet_to_json(workbook.Sheets[sheet_name_list[i]]));
         // var data = { sheet_name_list : XLSX.utils.sheet_to_json(workbook.Sheets[sheet_name_list[i]]) }
         combineSheets.push(XLSX.utils.sheet_to_json(workbook.Sheets[sheet_name_list[i]]));
     }
     res.send({statuscode: 200, data:combineSheets, sheetName: sheet_name_list});
-    // console.log(process.cwd());
+    // console.log(combineSheets);
 
     // var exceltojson;
     // upload(req,res,function(err){
@@ -53,5 +54,10 @@ router.get("/", function(req, res) {
     //     //     res.json({error_code:1,err_desc:"Corupted excel file"});
     //     // }
     // })
+});
+router.post("/", function(req, res) {
+        console.log(res.body);
+    XLSX.writeFile(req.body, path.join('public/Master12.xlsx'));
+    // res.send(res);
 });
 module.exports = router;

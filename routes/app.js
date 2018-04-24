@@ -5,13 +5,13 @@ var router = express.Router();
 router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
 });
-router.post("/api/Upload", function(req, res) {
-    return res.end("File uploaded sucessfully!.");
-    // upload(req, res, function(err) {
-    //     if (err) {
-    //         return res.end("Something went wrong!");
-    //     }
-    //     return res.end("File uploaded sucessfully!.");
-    // });
-});
+// router.post("/api/Upload", function(req, res) {
+//     return res.end("File uploaded sucessfully!.");
+//     // upload(req, res, function(err) {
+//     //     if (err) {
+//     //         return res.end("Something went wrong!");
+//     //     }
+//     //     return res.end("File uploaded sucessfully!.");
+//     // });
+// });
 module.exports = router;

@@ -3,7 +3,7 @@
 <button (click)="excelService.exportAsExcelFile(data, 'capgeminiTest')">
     Export
 </button>
-
+<!--{{data | json}}-->
 <div class="tabbable tabs-bottom">
     <div class="tab-content">
         <div class="tab-pane active" id="home">
@@ -12,11 +12,13 @@
                     <hot-table [data]="data?.data[i]"
                                [rowHeaders]="true"
                                [colHeaders]="true"
-                               (afterChange) = "afterChangeData($event)"
+                               (afterChange) = "afterChangeData($event, hot)"
                                *ngIf="sIndex === i"
                                [mergeCells] = "true"
                                [columnSorting] = "true"
-                               [contextMenu] = "true"
+                               [contextMenu]= "true"
+                               [columns]="columns"
+                               #hot
                     ></hot-table>
                 </ng-container>
             </div>
