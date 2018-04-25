@@ -11,9 +11,9 @@ import {HttpClient} from "@angular/common/http";
 })
 export class AppComponent {
     @ViewChild("hot") hot;
-    private data: any;
+    data: any = [];
     private colHeaders: string[];
-    private columns: any[];
+    // private columns: any[];
     private options: any;
     apiRoot: string = "http://localhost:8080";
     sIndex: number = 0;

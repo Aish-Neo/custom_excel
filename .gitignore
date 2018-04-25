@@ -3,3 +3,12 @@
 npm-debug.log
 /public/js
 .DS_Store
+
+*.ngsummary.json
+*.ngfactory.ts
+*.shim.ngstyle.js
+*.ngfactory.js
+*.css.shim.ts
+#assets/app/*.ngsummary.json
+*.shim.ngstyle.ts
+*.js
