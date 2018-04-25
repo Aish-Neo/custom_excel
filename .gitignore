@@ -11,4 +11,4 @@ npm-debug.log
 *.css.shim.ts
 #assets/app/*.ngsummary.json
 *.shim.ngstyle.ts
-*.js
+assets/app/**/*.js
